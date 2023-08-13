@@ -12,12 +12,18 @@ COLOR = 'color'
 VALUE = 'value'
 PROPS = 'props'
 
-DEFAULT_COLOR = 'lightgray'  # Uncolored color, can color over
+DEFAULT_ATTRIBUTE_VALUES = {
+    COLOR: 'lightgray', 
+    VALUE: None, 
+    PROPS: (),
+}
 
 edge_list = [('A', 'B'), ('A', 'C'), ('A', 'D'), ('B', 'C'), ('B', 'D'), ('C', 'D')]
 G = nx.Graph()
 G.add_edges_from(edge_list)
-nx.set_node_attributes(G, DEFAULT_COLOR, COLOR)
+for node in G.nodes:
+    for attribute, value in DEFAULT_ATTRIBUTE_VALUES.items():
+        G.nodes[node][attribute] = value
 
 draw_kwargs = {'with_labels': True, 'node_color': nx.get_node_attributes(G, COLOR).values()}
 if nx.is_planar(G):
