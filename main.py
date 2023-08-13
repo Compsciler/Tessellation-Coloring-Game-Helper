@@ -4,13 +4,17 @@ import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 
 class Node:
+    default_color = 'white'
+    
     """
     key: unique name shown in the graph
-    val: node value (usually color string)
+    color: node color string
+    val: node additional value (such as a number or letter)
     props: tuple of special node properties
     """
-    def __init__(self, key, val=None, props=()):
+    def __init__(self, key, color=default_color, val=None, props=()):
         self.key = key
+        self.color = color
         self.val = val
         self.props = props
     
