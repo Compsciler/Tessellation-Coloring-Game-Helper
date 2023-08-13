@@ -18,6 +18,6 @@ fig, ax = plt.subplots()
 plt.axis('off')
 
 # Animator call
-anim = animation.FuncAnimation(fig, animate, frames=5, interval=250, blit=False)
+anim = animation.FuncAnimation(fig, animate, frames=5, interval=200, blit=False)
 
 plt.show()  # Display the animation in an interactive window

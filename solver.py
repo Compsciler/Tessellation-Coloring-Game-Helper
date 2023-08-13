@@ -6,11 +6,14 @@ class Solver:
     def __init__(self, G):
         self.G = G
     
-    def find_solutions(self, color_order=()):
-        def dfs(path):
+    def find_solutions(self, color_order=(), show_coloring=False):
+        def dfs(path):  # Backtracking
             nonlocal index
             if self.is_valid_solution(path):
-                solutions.append(path.copy())
+                if show_coloring:
+                    solutions.append([(node, self.G.nodes[node][COLOR]) for node in path])
+                else:
+                    solutions.append(path.copy())
                 return
 
             prev_node = path[-1] if len(path) > 0 else None
@@ -19,10 +22,13 @@ class Solver:
                 if self.is_valid_next_node(node, path, color=curr_color):
                     old_node_attrs = self.G.nodes[node].copy()
                     node_attrs = self.get_node_attribute_dict(node, color=curr_color)
+
                     self.G.nodes[node].update(node_attrs)
                     path.append(node)
                     index += 1
+
                     dfs(path)
+
                     self.G.nodes[node].update(old_node_attrs)
                     path.pop()
                     index -= 1
