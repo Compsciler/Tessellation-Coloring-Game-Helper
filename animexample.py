@@ -13,6 +13,7 @@ G.add_edges_from([(1,2), (3,4), (2,5), (4,5), (6,7), (8,9), (4,7), (1,7), (3,5),
 def animate(frame_num):
     colors = ['r', 'g', 'b', 'c', 'm', 'y', 'k', 'w']  # https://matplotlib.org/stable/gallery/color/named_colors.html
     nx.draw_circular(G, node_color=[random.choice(colors) for j in range(9)])
+    # return []  # Uncomment if using blit=True
 
 fig, ax = plt.subplots()
 plt.axis('off')

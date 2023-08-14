@@ -5,15 +5,17 @@ from common import *
 class Solver:
     def __init__(self, G):
         self.G = G
-    
-    def find_solutions(self, color_order=(), show_coloring=False):
+
+    def find_solutions(self, color_order=(), show_coloring=False, show_backtracking_process=False):
         def dfs(path):  # Backtracking
             nonlocal index
-            if self.is_valid_solution(path):
+            is_valid_solution = self.is_valid_solution(path)
+            if is_valid_solution or show_backtracking_process:
                 if show_coloring:
                     solutions.append([(node, self.G.nodes[node][COLOR]) for node in path])
                 else:
                     solutions.append(path.copy())
+            if is_valid_solution:
                 return
 
             prev_node = path[-1] if len(path) > 0 else None

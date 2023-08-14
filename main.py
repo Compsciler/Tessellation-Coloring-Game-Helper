@@ -22,6 +22,6 @@ else:
 plt.show()
 
 solver = Solver(G)
-solutions = solver.find_solutions(color_order=('r', 'g', 'b'), show_coloring=False)
+solutions = solver.find_solutions(color_order=('r', 'g', 'b'), show_coloring=False, show_backtracking_process=False)
 print("Solutions:")
 print(*solutions, sep='\n')
