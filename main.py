@@ -1,4 +1,5 @@
 import networkx as nx
+import matplotlib.pyplot as plt
 
 from common import *
 import solver
@@ -8,14 +9,13 @@ edge_list = [('A', 'B'), ('A', 'C'), ('A', 'D'), ('B', 'C'), ('B', 'D')]
 G = nx.Graph()
 G.add_edges_from(edge_list)
 for node in G.nodes:
-    for attribute, value in DEFAULT_ATTRIBUTE_VALUES.items():
+    for attribute, value in DEFAULT_NODE_ATTRIBUTE_VALUES.items():
         G.nodes[node][attribute] = value
+for edge in G.edges:
+    for attribute, value in DEFAULT_EDGE_ATTRIBUTE_VALUES.items():
+        G.edges[edge][attribute] = value
 
-# draw_kwargs = visualizer.get_draw_kwargs(G)
-# if nx.is_planar(G):
-#     nx.draw_planar(G, **draw_kwargs)
-# else:
-#     nx.draw_spring(G, **draw_kwargs)
+# visualizer.draw_graph(G)
 # plt.show()
 
 color_order = ('r', 'g', 'b')
@@ -23,4 +23,4 @@ solutions = solver.find_solutions(G, color_order=color_order, node_output_type=s
 print("Solutions:")
 print(*solutions, sep='\n')
 
-visualizer.animate_backtracking(G, color_order=color_order, interval=200)
+visualizer.animate_backtracking(G, color_order=color_order, interval=1/12 * 1000, valid_solution_pause_time_ms=1000)
