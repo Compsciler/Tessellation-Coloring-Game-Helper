@@ -1,25 +1,34 @@
 import networkx as nx
+from enum import Enum, auto
 
 from common import *
 
 class Solver:
-    def __init__(self, G):
+    def __init__(self, G, color_order=()):
         self.G = G
+        self.color_order = color_order
 
-    def find_solutions(self, color_order=(), show_coloring=False, show_backtracking_process=False):
+    class NodeOutputType(Enum):
+        NODES_ONLY = auto()
+        NODES_WITH_COLORING = auto()
+        FULL_GRAPH = auto()
+
+    def find_solutions(self, node_output_type=NodeOutputType.NODES_ONLY, show_backtracking_process=False):
         def dfs(path):  # Backtracking
             nonlocal index
             is_valid_solution = self.is_valid_solution(path)
             if is_valid_solution or show_backtracking_process:
-                if show_coloring:
-                    solutions.append([(node, self.G.nodes[node][COLOR]) for node in path])
-                else:
+                if node_output_type == self.NodeOutputType.NODES_ONLY:
                     solutions.append(path.copy())
+                elif node_output_type == self.NodeOutputType.NODES_WITH_COLORING:
+                    solutions.append([(node, self.G.nodes[node][COLOR]) for node in path])
+                elif node_output_type == self.NodeOutputType.FULL_GRAPH:
+                    solutions.append(self.G.copy())
             if is_valid_solution:
                 return
 
             prev_node = path[-1] if len(path) > 0 else None
-            curr_color = self.get_current_color(index, color_order)
+            curr_color = self.get_current_color(index)
             for node in self.get_travellable_nodes(prev_node):
                 if self.is_valid_next_node(node, path, color=curr_color):
                     old_node_attrs = self.G.nodes[node].copy()
@@ -33,17 +42,26 @@ class Solver:
 
                     self.G.nodes[node].update(old_node_attrs)
                     path.pop()
+                    if show_backtracking_process:
+                        if node_output_type == self.NodeOutputType.NODES_ONLY:
+                            solutions.append(path.copy())
+                        elif node_output_type == self.NodeOutputType.NODES_WITH_COLORING:
+                            solutions.append([(node, self.G.nodes[node][COLOR]) for node in path])
+                        elif node_output_type == self.NodeOutputType.FULL_GRAPH:
+                            solutions.append(self.G.copy())
                     index -= 1
 
+        old_G = self.G.copy()
         index = 0
         solutions = []
         dfs([])
+        self.G = old_G  # G should equal old_G, but just in case
         return solutions
 
-    def get_current_color(self, index, color_order):
-        if color_order == ():
+    def get_current_color(self, index):
+        if self.color_order == ():
             return None
-        return color_order[index % len(color_order)]
+        return self.color_order[index % len(self.color_order)]
 
     def get_node_attribute_dict(self, node, color=None, value=None, props=None):
         attribute_dict = self.G.nodes[node].copy()
