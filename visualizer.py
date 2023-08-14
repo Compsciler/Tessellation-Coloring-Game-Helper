@@ -24,10 +24,10 @@ def animate_backtracking(G, color_order=(), interval=200, valid_solution_pause_t
 
         draw_graph(G)
         
-        plt.text(1.0, 1.0, f'Frame: {frame_num}', transform=plt.gca().transAxes, fontsize=12,
-                verticalalignment='top', horizontalalignment='right', bbox=dict(facecolor='white', alpha=1.0))
-        plt.text(1.0, 0.9, f'Solutions found: {solutions_count}', transform=plt.gca().transAxes, fontsize=12,
-                verticalalignment='top', horizontalalignment='right', bbox=dict(facecolor='white', alpha=1.0))
+        plt.text(0.0, 1.0, f'Frame: {frame_num}', transform=plt.gca().transAxes, fontsize=12,
+                verticalalignment='top', horizontalalignment='left', bbox=dict(facecolor='white', alpha=1.0))
+        plt.text(0.0, 0.9, f'Solutions found: {solutions_count}', transform=plt.gca().transAxes, fontsize=12,
+                verticalalignment='top', horizontalalignment='left', bbox=dict(facecolor='white', alpha=1.0))
         
         if is_valid_solution:
             old_interval = anim.event_source.interval
@@ -49,7 +49,8 @@ def draw_graph(G):
         }
     
     draw_kwargs = get_draw_kwargs(G)
-    if nx.is_planar(G):
-        nx.draw_planar(G, **draw_kwargs)
-    else:
-        nx.draw_spring(G, **draw_kwargs)
+    nx.draw_spectral(G, **draw_kwargs)
+    # if nx.is_planar(G):
+    #     nx.draw_planar(G, **draw_kwargs)
+    # else:
+    #     nx.draw_spectral(G, **draw_kwargs)
