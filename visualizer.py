@@ -6,8 +6,8 @@ from common import *
 import solver
 
 def animate_backtracking(G, color_order=(), interval=200, valid_solution_pause_time_ms=1000):
-    graphs = solver.find_solutions(G, color_order=color_order, node_output_type=solver.NodeOutputType.FULL_GRAPH, show_backtracking_process=True)
-    paths = solver.find_solutions(G, color_order=color_order, node_output_type=solver.NodeOutputType.NODES_ONLY, show_backtracking_process=True)
+    graphs_and_paths = solver.find_solutions(G, color_order=color_order, node_output_type=solver.NodeOutputType.FULL_GRAPH_AND_NODE_LIST, show_backtracking_process=True)
+    graphs, paths = zip(*graphs_and_paths)
     fig, ax = plt.subplots()
     plt.axis('off')
 
