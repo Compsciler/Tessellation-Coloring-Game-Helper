@@ -82,4 +82,5 @@ print(*solutions, sep='\n')
 # pp.pprint(isomorph.get_isomorphism_counts(solutions))
 
 # visualizer.animate_backtracking(G, color_order=color_order, interval=1/60 * 1000, valid_solution_pause_time_ms=1000)
-visualizer.show_solutions(G, color_order=color_order, interval=1/60 * 1000, animate=True, remove_isomorphic_solutions=True)
+visualizer.show_solutions(G, color_order=color_order, interval=1/60 * 1000, animate=True, 
+                          remove_isomorphic_solutions=True, automorphically_equivalent_nodes=automorphically_equivalent_nodes)

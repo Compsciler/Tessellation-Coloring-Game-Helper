@@ -42,8 +42,12 @@ def animate_backtracking(G, color_order=(), interval=200, valid_solution_pause_t
     plt.show()
 
 # This lags the more solutions you view somehow
-def show_solutions(G, color_order=(), interval=200, animate=True, remove_isomorphic_solutions=True):
-    solution_path_graphs = solver.find_solutions(G, color_order=color_order, node_output_type=solver.NodeOutputType.FULL_GRAPHS_FOR_PATH, show_backtracking_process=False)
+def show_solutions(G, color_order=(), interval=200, animate=True, remove_isomorphic_solutions=True, automorphically_equivalent_nodes=None):
+    start_nodes = None
+    if remove_isomorphic_solutions and automorphically_equivalent_nodes is not None:
+        start_nodes = automorphically_equivalent_nodes.keys()
+    solution_path_graphs = solver.find_solutions(G, color_order=color_order, node_output_type=solver.NodeOutputType.FULL_GRAPHS_FOR_PATH,
+                                                 show_backtracking_process=False, start_nodes=automorphically_equivalent_nodes)
     solution_graphs = [path_graphs[-1] for path_graphs in solution_path_graphs]
     if not animate:
         solution_path_graphs = [[solution_graph] for solution_graph in solution_graphs]
@@ -52,7 +56,6 @@ def show_solutions(G, color_order=(), interval=200, animate=True, remove_isomorp
     if remove_isomorphic_solutions:
         solution_graphs = list(isomorphic_graphs.keys())
         solution_path_graphs = [path_graphs for path_graphs in solution_path_graphs if path_graphs[-1] in solution_graphs]
-        print(len(solution_graphs), len(solution_path_graphs))
 
     fig, ax = plt.subplots()
     plt.axis('off')
@@ -83,7 +86,13 @@ def show_solutions(G, color_order=(), interval=200, animate=True, remove_isomorp
             plt.text(0.0, 1.0, f'Solution number: {self.solution_index + 1}/{len(solution_graphs)}', transform=plt.gca().transAxes, fontsize=12,
                      verticalalignment='top', horizontalalignment='left', bbox=dict(facecolor='white', alpha=1.0))
             isomorphic_graph = get_key_by_list_value(isomorphic_graphs, solution_graphs[self.solution_index])
-            plt.text(0.0, 0.9, f'Isomorphic solutions: {len(isomorphic_graphs[isomorphic_graph])}', transform=plt.gca().transAxes, fontsize=12,
+            
+            isomorphic_solutions_count = len(isomorphic_graphs[isomorphic_graph])
+            if automorphically_equivalent_nodes is not None:
+                automorphically_equivalent_node = get_key_by_list_value(automorphically_equivalent_nodes, solution_graphs[self.solution_index].nodes)
+                print(len(automorphically_equivalent_nodes[automorphically_equivalent_node]))
+                isomorphic_solutions_count *= len(automorphically_equivalent_nodes[automorphically_equivalent_node])
+            plt.text(0.0, 0.9, f'Isomorphic solutions: {isomorphic_solutions_count}', transform=plt.gca().transAxes, fontsize=12,
                      verticalalignment='top', horizontalalignment='left', bbox=dict(facecolor='white', alpha=1.0))
 
     callback = SolutionIndex()
