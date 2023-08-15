@@ -8,6 +8,7 @@ import isomorph
 import solver
 import visualizer
 
+### Set up edge list
 # edge_list = [('A', 'B'), ('A', 'C'), ('A', 'D'), ('B', 'C'), ('B', 'D')]
 
 # 4x4 square layout: solutions for 2, 4, 5, 6, 8, [1, 2, 3, 4, 2, 3]
@@ -33,7 +34,7 @@ import visualizer
 #     ('40', '30'), ('40', '41'), ('41', '31'), ('41', '42'), ('42', '32'), ('42', '43'), ('43', '33'), ('43', '44'), ('44', '34'),
 # ]
 
-# No-color level:
+# No-color level layout:
 # edge_list = [
 #     ('01', '02'), ('02', '03'),
 #     ('11', '01'), ('11', '12'), ('12', '02'), ('12', '13'), ('13', '03'),
@@ -73,6 +74,7 @@ edge_list = [
 #     ('Sc1', 'Tac'), ('Sc1', 'Tc1'), ('Sc2', 'Tc1'), ('Sc2', 'Tc2'), ('Sc3', 'Tc2'), ('Sc3', 'Tc3'), ('Sc4', 'Tc3'), ('Sc4', 'Tbc'),
 # ]
 
+### Create graph
 G = nx.Graph()
 G.add_edges_from(edge_list)
 for node in G.nodes:
@@ -84,23 +86,30 @@ for edge in G.edges:
 
 automorphically_equivalent_nodes = isomorph.get_automorphically_equivalent_nodes(G)
 
+### Draw blank graph
 # visualizer.draw_graph(G)
 # plt.show()
 
+### Set color order
 color_order = ('r', 'g', 'b')
 # color_order = ('1', '2', '3', '4', '5', '6', '7', '8', '9')
 # color_order = ('1', '2', '3', '4', '2', '3')
 # color_order = None
 
+### Print solution paths
 # solutions = solver.find_solutions(G, color_order=color_order, node_output_type=solver.NodeOutputType.NODE_LIST, 
 #                                   show_backtracking_process=False, start_nodes=automorphically_equivalent_nodes)
 # print(f'Color order: {color_order}')
 # print('Solutions:')
 # print(*solutions, sep='\n')
 
+### Print solution graph isomorphisms
+# graphs = solver.find_solutions(G, color_order=color_order, node_output_type=solver.NodeOutputType.FULL_GRAPH, 
+#                                show_backtracking_process=False, start_nodes=automorphically_equivalent_nodes)
 # pp = pprint.PrettyPrinter(indent=4)
-# pp.pprint(isomorph.get_isomorphism_counts(solutions))
+# pp.pprint(isomorph.get_isomorphism_counts(graphs))
 
+### Matplotlib output
 visualizer.animate_backtracking(G, color_order=color_order, interval=1/60 * 1000, valid_solution_pause_time_ms=1000)
 # visualizer.show_solutions(G, color_order=color_order, interval=1/6 * 1000, animate=True, remove_isomorphic_solutions=True)
 # visualizer.show_start_node_distribution(G, color_order=color_order)
