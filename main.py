@@ -9,6 +9,8 @@ import solver
 import visualizer
 
 # edge_list = [('A', 'B'), ('A', 'C'), ('A', 'D'), ('B', 'C'), ('B', 'D')]
+
+# 4x4 square layout: solutions for 2, 4, 5, 6, 8, [1, 2, 3, 4, 2, 3]
 # edge_list = [
 #     ('00', '01'), ('01', '02'), ('02', '03'),
 #     ('10', '00'), ('10', '11'), ('11', '01'), ('11', '12'), ('12', '02'), ('12', '13'), ('13', '03'),
@@ -28,6 +30,8 @@ import visualizer
 #     ('O', 'A1'), ('O', 'B1'), ('O', 'C1'), ('O', 'D1'), ('O', 'E1'), ('O', 'F1'),
 #     ('A1', 'B1'), ('B1', 'C1'), ('C1', 'D1'), ('D1', 'E1'), ('E1', 'F1'), ('F1', 'A1'),
 # ]
+
+# Catan hexagon layout: solutions for 3, 4, 5, 6, 7
 edge_list = [
     ('O', 'A1'), ('O', 'C1'), ('O', 'E1'), ('O', 'G1'), ('O', 'I1'), ('O', 'K1'),
     ('A1', 'C1'), ('C1', 'E1'), ('E1', 'G1'), ('G1', 'I1'), ('I1', 'K1'), ('K1', 'A1'),
@@ -39,6 +43,17 @@ edge_list = [
     ('I2', 'I1'), ('I2', 'J2'), ('J2', 'I1'), ('J2', 'K1'), ('J2', 'K2'),
     ('K2', 'K1'), ('K2', 'L2'), ('L2', 'K1'), ('L2', 'A1'), ('L2', 'A2'),
 ]
+
+# Rhombitrihexagonal tiling with 3 hexagons: solutions for 2, 9
+# edge_list = [
+#     ('Ha', 'Sa1'), ('Ha', 'Sa2'), ('Ha', 'Sa3'), ('Ha', 'Sa4'), ('Ha', 'Sab'), ('Ha', 'Sac'),
+#     ('Hb', 'Sb1'), ('Hb', 'Sb2'), ('Hb', 'Sb3'), ('Hb', 'Sb4'), ('Hb', 'Sab'), ('Hb', 'Sbc'),
+#     ('Hc', 'Sc1'), ('Hc', 'Sc2'), ('Hc', 'Sc3'), ('Hc', 'Sc4'), ('Hc', 'Sac'), ('Hc', 'Sbc'),
+#     ('Sab', 'Tabc'), ('Sab', 'Tab'), ('Sac', 'Tabc'), ('Sac', 'Tac'), ('Sbc', 'Tabc'), ('Sbc', 'Tbc'),
+#     ('Sa1', 'Tab'), ('Sa1', 'Ta1'), ('Sa2', 'Ta1'), ('Sa2', 'Ta2'), ('Sa3', 'Ta2'), ('Sa3', 'Ta3'), ('Sa4', 'Ta3'), ('Sa4', 'Tac'),
+#     ('Sb1', 'Tbc'), ('Sb1', 'Tb1'), ('Sb2', 'Tb1'), ('Sb2', 'Tb2'), ('Sb3', 'Tb2'), ('Sb3', 'Tb3'), ('Sb4', 'Tb3'), ('Sb4', 'Tab'),
+#     ('Sc1', 'Tac'), ('Sc1', 'Tc1'), ('Sc2', 'Tc1'), ('Sc2', 'Tc2'), ('Sc3', 'Tc2'), ('Sc3', 'Tc3'), ('Sc4', 'Tc3'), ('Sc4', 'Tbc'),
+# ]
 
 G = nx.Graph()
 G.add_edges_from(edge_list)
@@ -55,10 +70,12 @@ automorphically_equivalent_nodes = isomorph.get_automorphically_equivalent_nodes
 # plt.show()
 
 color_order = ('r', 'g', 'b')
+# color_order = ('1', '2', '3', '4', '5', '6', '7', '8', '9')
 # color_order = ('1', '2', '3', '4', '2', '3')
-solutions = solver.find_solutions(G, color_order=color_order, node_output_type=solver.NodeOutputType.FULL_GRAPH, 
-                                  show_backtracking_process=False, start_nodes=automorphically_equivalent_nodes.keys())
-print("Solutions:")
+solutions = solver.find_solutions(G, color_order=color_order, node_output_type=solver.NodeOutputType.NODE_LIST, 
+                                  show_backtracking_process=False, start_nodes=automorphically_equivalent_nodes)
+print(f'Color order: {color_order}')
+print('Solutions:')
 print(*solutions, sep='\n')
 
 # pp = pprint.PrettyPrinter(indent=4)
