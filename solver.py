@@ -9,6 +9,7 @@ class NodeOutputType(Enum):
     EDGE_LIST = auto()
     FULL_GRAPH = auto()
     FULL_GRAPH_AND_NODE_LIST = auto()
+    FULL_GRAPHS_FOR_PATH = auto()
 
 def find_solutions(G, color_order=(), node_output_type=NodeOutputType.NODE_LIST, show_backtracking_process=False, start_nodes=None):
     def dfs(path, index):  # Backtracking
@@ -31,6 +32,8 @@ def find_solutions(G, color_order=(), node_output_type=NodeOutputType.NODE_LIST,
                     edge_travelled = (prev_node, node)
                     edges_travelled.append(edge_travelled)
                     update_edge(edge_travelled, True)
+                if node_output_type == NodeOutputType.FULL_GRAPHS_FOR_PATH:
+                    path_graphs.append(G.copy())
                 index += 1
 
                 dfs(path, index)
@@ -40,6 +43,8 @@ def find_solutions(G, color_order=(), node_output_type=NodeOutputType.NODE_LIST,
                 if len(edges_travelled) > 0:
                     edge_removed = edges_travelled.pop()
                     update_edge(edge_removed, False)
+                if node_output_type == NodeOutputType.FULL_GRAPHS_FOR_PATH:
+                    path_graphs.pop()
                 if show_backtracking_process:
                     append_solution(path)
                 index -= 1
@@ -55,6 +60,8 @@ def find_solutions(G, color_order=(), node_output_type=NodeOutputType.NODE_LIST,
             solutions.append(G.copy())
         elif node_output_type == NodeOutputType.FULL_GRAPH_AND_NODE_LIST:
             solutions.append((G.copy(), path.copy()))
+        elif node_output_type == NodeOutputType.FULL_GRAPHS_FOR_PATH:
+            solutions.append(path_graphs.copy())
     
     def update_edge(edge, is_travelled):
         edge_color = TRAVELLED_EDGE_ATTRIBUTE_VALUES[COLOR] if is_travelled else DEFAULT_EDGE_ATTRIBUTE_VALUES[COLOR]
@@ -68,6 +75,7 @@ def find_solutions(G, color_order=(), node_output_type=NodeOutputType.NODE_LIST,
     index = 0
     solutions = []
     edges_travelled = []
+    path_graphs = [G.copy()]
     dfs([], index)
     G = old_G  # G should equal old_G, but just in case
     return solutions

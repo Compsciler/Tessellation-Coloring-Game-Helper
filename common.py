@@ -17,10 +17,18 @@ DEFAULT_NODE_ATTRIBUTE_VALUES = {
 WIDTH = 'width'
 
 DEFAULT_EDGE_ATTRIBUTE_VALUES = {
-    COLOR: 'gray',
-    WIDTH: 1.0,
+    COLOR: 'lightgray',
+    WIDTH: 3.0,
 }
 TRAVELLED_EDGE_ATTRIBUTE_VALUES = {
     COLOR: 'black',
     WIDTH: 3.0,
 }
+
+
+def get_key_by_list_value(dictionary, val):
+    for k, list_v in dictionary.items():
+        for v in list_v:
+            if v == val:
+                return k
+    return None

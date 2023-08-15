@@ -9,16 +9,19 @@ em = iso.categorical_edge_match(list(DEFAULT_EDGE_ATTRIBUTE_VALUES.keys()), list
 def is_solution_isomorphic(G1, G2):
     return nx.is_isomorphic(G1, G2, node_match=nm, edge_match=em)
 
-def get_isomorphism_counts(graphs):
+def get_isomorphic_graphs(graphs):
     isomorphism_counts = defaultdict(int)
     for graph in graphs:
         for iso_graph in isomorphism_counts.keys():
             if is_solution_isomorphic(graph, iso_graph):
-                isomorphism_counts[iso_graph] += 1
+                isomorphism_counts[iso_graph].append(graph)
                 break
         else:
-            isomorphism_counts[graph] = 1
+            isomorphism_counts[graph] = [graph]
     return dict(isomorphism_counts)
+
+def get_isomorphism_counts(graphs):
+    return {graph: len(iso_graphs) for graph, iso_graphs in get_isomorphic_graphs(graphs).items()}
 
 # Automorphic equivalence: https://faculty.ucr.edu/~hanneman/nettext/C14_Automorphic_Equivalence.html
 def get_automorphically_equivalent_nodes(G):

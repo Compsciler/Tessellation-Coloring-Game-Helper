@@ -81,4 +81,5 @@ print(*solutions, sep='\n')
 # pp = pprint.PrettyPrinter(indent=4)
 # pp.pprint(isomorph.get_isomorphism_counts(solutions))
 
-visualizer.animate_backtracking(G, color_order=color_order, interval=1/60 * 1000, valid_solution_pause_time_ms=1000)
+# visualizer.animate_backtracking(G, color_order=color_order, interval=1/60 * 1000, valid_solution_pause_time_ms=1000)
+visualizer.show_solutions(G, color_order=color_order, interval=1/60 * 1000, animate=True, remove_isomorphic_solutions=True)
