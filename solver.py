@@ -1,5 +1,7 @@
 import networkx as nx
 from enum import Enum, auto
+from tqdm import tqdm
+import time
 
 from common import *
 
@@ -11,7 +13,7 @@ class NodeOutputType(Enum):
     FULL_GRAPH_AND_NODE_LIST = auto()
     FULL_GRAPHS_FOR_PATH = auto()
 
-def find_solutions(G, color_order=(), node_output_type=NodeOutputType.NODE_LIST, show_backtracking_process=False, start_nodes=None):
+def find_solutions(G, color_order=None, node_output_type=NodeOutputType.NODE_LIST, show_backtracking_process=False, start_nodes=None):
     def dfs(path, index):  # Backtracking
         is_valid_solution_ = is_valid_solution(path, G)
         if is_valid_solution_ or show_backtracking_process:
@@ -48,6 +50,9 @@ def find_solutions(G, color_order=(), node_output_type=NodeOutputType.NODE_LIST,
                 if show_backtracking_process:
                     append_solution(path)
                 index -= 1
+                if index == 0:
+                    progress_bar.update(1)
+                    pass
 
     def append_solution(path):
         if node_output_type == NodeOutputType.NODE_LIST:
@@ -71,6 +76,8 @@ def find_solutions(G, color_order=(), node_output_type=NodeOutputType.NODE_LIST,
 
     if start_nodes is None:
         start_nodes = G.nodes()
+    progress_bar = tqdm(total=len(start_nodes), desc="Starting nodes explored")
+
     old_G = G.copy()
     index = 0
     solutions = []
@@ -81,7 +88,7 @@ def find_solutions(G, color_order=(), node_output_type=NodeOutputType.NODE_LIST,
     return solutions
 
 def get_current_color(index, color_order):
-    if color_order == ():
+    if color_order is None:
         return None
     return color_order[index % len(color_order)]
 
@@ -89,6 +96,8 @@ def get_node_attribute_dict(node, G, color=None, value=None, props=None):
     attribute_dict = G.nodes[node].copy()
     if color is not None:
         attribute_dict[COLOR] = color
+    else:
+        attribute_dict[COLOR] = NO_COLOR_NODE_COLOR
     if value is not None:
         attribute_dict[VALUE] = value
     if props is not None:

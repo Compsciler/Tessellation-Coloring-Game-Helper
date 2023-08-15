@@ -1,12 +1,13 @@
 import networkx as nx
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
+from matplotlib.colors import LinearSegmentedColormap
 
 from common import *
 import isomorph
 import solver
 
-def animate_backtracking(G, color_order=(), interval=200, valid_solution_pause_time_ms=1000):
+def animate_backtracking(G, color_order=None, interval=200, valid_solution_pause_time_ms=1000):
     graphs_and_paths = solver.find_solutions(G, color_order=color_order, node_output_type=solver.NodeOutputType.FULL_GRAPH_AND_NODE_LIST, show_backtracking_process=True)
     graphs, paths = zip(*graphs_and_paths)
     fig, ax = plt.subplots()
@@ -42,8 +43,12 @@ def animate_backtracking(G, color_order=(), interval=200, valid_solution_pause_t
     plt.show()
 
 # This lags the more solutions you view somehow
-def show_solutions(G, color_order=(), interval=200, animate=True, remove_isomorphic_solutions=True):
+def show_solutions(G, color_order=None, interval=200, animate=True, remove_isomorphic_solutions=True):
     solution_path_graphs = solver.find_solutions(G, color_order=color_order, node_output_type=solver.NodeOutputType.FULL_GRAPHS_FOR_PATH, show_backtracking_process=False)
+    if len(solution_path_graphs) == 0:
+        print('No solutions found')
+        return
+    
     solution_graphs = [path_graphs[-1] for path_graphs in solution_path_graphs]
     if not animate:
         solution_path_graphs = [[solution_graph] for solution_graph in solution_graphs]
@@ -52,7 +57,6 @@ def show_solutions(G, color_order=(), interval=200, animate=True, remove_isomorp
     if remove_isomorphic_solutions:
         solution_graphs = list(isomorphic_graphs.keys())
         solution_path_graphs = [path_graphs for path_graphs in solution_path_graphs if path_graphs[-1] in solution_graphs]
-        print(len(solution_graphs), len(solution_path_graphs))
 
     fig, ax = plt.subplots()
     plt.axis('off')
@@ -98,19 +102,44 @@ def show_solutions(G, color_order=(), interval=200, animate=True, remove_isomorp
 
     callback.update_plot()
 
+def show_start_node_distribution(G, color_order=None):
+    solution_paths = solver.find_solutions(G, color_order=color_order, node_output_type=solver.NodeOutputType.NODE_LIST, show_backtracking_process=False)
+    first_nodes = [path[0] for path in solution_paths]
+    first_node_counts = {node: first_nodes.count(node) for node in G.nodes()}
+    
+    lerp_start_color = DEFAULT_NODE_ATTRIBUTE_VALUES[COLOR]
+    lerp_end_color = (1, 0, 0)
+    
+    colormap = LinearSegmentedColormap.from_list('lerp_colormap', [lerp_start_color, lerp_end_color])
 
-def draw_graph(G):
+    G_copy = G.copy()
+    max_first_node_count = max(first_node_counts.values())
+    if max_first_node_count == 0:  # Handle division by zero
+        max_first_node_count = 1
+    node_colors = [colormap(float(count) / max_first_node_count) for count in first_node_counts.values()]
+    nx.set_node_attributes(G_copy, dict(zip(G_copy.nodes(), node_colors)), COLOR)
+
+    node_labels = {node: first_node_counts[node] for node in G_copy.nodes()}
+    draw_graph(G_copy, node_labels=node_labels)
+    plt.show()
+
+def draw_graph(G, node_labels=None):
     def get_draw_kwargs(G):
         return {
             'with_labels': True,
-            'node_color': nx.get_node_attributes(G, COLOR).values(),
+            'node_color': list(nx.get_node_attributes(G, COLOR).values()),
             'edge_color': nx.get_edge_attributes(G, COLOR).values(),
             'width': list(nx.get_edge_attributes(G, WIDTH).values()),
         }
     
     draw_kwargs = get_draw_kwargs(G)
-    nx.draw_spectral(G, **draw_kwargs)
+    pos = nx.spectral_layout(G)
+    nx.draw(G, pos, **draw_kwargs)
     # if nx.is_planar(G):
     #     nx.draw_planar(G, **draw_kwargs)
     # else:
     #     nx.draw_spectral(G, **draw_kwargs)
+    if node_labels is not None:
+        for node, (x, y) in pos.items():
+            pos[node] = (x, y - 0.08)
+        nx.draw_networkx_labels(G, pos, labels=node_labels, verticalalignment='top')

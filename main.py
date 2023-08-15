@@ -24,6 +24,24 @@ import visualizer
 #     ('03', '02'), ('03', '13'), ('13', '12'), ('13', '23'), ('23', '22'), ('23', '33'), ('33', '32'),
 # ]
 
+# 5x5 square layout:
+# edge_list = [
+#     ('00', '01'), ('01', '02'), ('02', '03'), ('03', '04'),
+#     ('10', '00'), ('10', '11'), ('11', '01'), ('11', '12'), ('12', '02'), ('12', '13'), ('13', '03'), ('13', '14'), ('14', '04'),
+#     ('20', '10'), ('20', '21'), ('21', '11'), ('21', '22'), ('22', '12'), ('22', '23'), ('23', '13'), ('23', '24'), ('24', '14'),
+#     ('30', '20'), ('30', '31'), ('31', '21'), ('31', '32'), ('32', '22'), ('32', '33'), ('33', '23'), ('33', '34'), ('34', '24'),
+#     ('40', '30'), ('40', '41'), ('41', '31'), ('41', '42'), ('42', '32'), ('42', '43'), ('43', '33'), ('43', '44'), ('44', '34'),
+# ]
+
+# No-color level:
+# edge_list = [
+#     ('01', '02'), ('02', '03'),
+#     ('11', '01'), ('11', '12'), ('12', '02'), ('12', '13'), ('13', '03'),
+#     ('20', '21'), ('21', '11'), ('21', '22'), ('22', '12'), ('22', '23'), ('23', '13'), ('23', '24'),
+#     ('31', '21'), ('31', '32'), ('32', '22'), ('32', '33'), ('33', '23'),
+#     ('41', '31'), ('41', '42'), ('42', '32'), ('42', '43'), ('43', '33'),
+# ]
+
 # Axial coordinates: https://www.redblobgames.com/grids/hexagons/#coordinates-axial
 # edge_list = [('0 0', '0 1'), ('0 0', '1 -1'), ('0 1', '1 0'), ('0 1', '1 -1'), ('0 1', '1 1'), ('1 -1', '1 0'), ('1 -1', '2 -2'), ('1 0', '2 -1'), ('1 0', '1 1'), ('1 1', '2 0'), ('1 1', '2 1'), ('2 -2', '2 -1'), ('2 -1', '2 0'), ('2 0', '2 1')]
 # edge_list = [
@@ -72,14 +90,17 @@ automorphically_equivalent_nodes = isomorph.get_automorphically_equivalent_nodes
 color_order = ('r', 'g', 'b')
 # color_order = ('1', '2', '3', '4', '5', '6', '7', '8', '9')
 # color_order = ('1', '2', '3', '4', '2', '3')
-solutions = solver.find_solutions(G, color_order=color_order, node_output_type=solver.NodeOutputType.NODE_LIST, 
-                                  show_backtracking_process=False, start_nodes=automorphically_equivalent_nodes)
-print(f'Color order: {color_order}')
-print('Solutions:')
-print(*solutions, sep='\n')
+# color_order = None
+
+# solutions = solver.find_solutions(G, color_order=color_order, node_output_type=solver.NodeOutputType.NODE_LIST, 
+#                                   show_backtracking_process=False, start_nodes=automorphically_equivalent_nodes)
+# print(f'Color order: {color_order}')
+# print('Solutions:')
+# print(*solutions, sep='\n')
 
 # pp = pprint.PrettyPrinter(indent=4)
 # pp.pprint(isomorph.get_isomorphism_counts(solutions))
 
-# visualizer.animate_backtracking(G, color_order=color_order, interval=1/60 * 1000, valid_solution_pause_time_ms=1000)
-visualizer.show_solutions(G, color_order=color_order, interval=1/60 * 1000, animate=True, remove_isomorphic_solutions=True)
+visualizer.animate_backtracking(G, color_order=color_order, interval=1/60 * 1000, valid_solution_pause_time_ms=1000)
+# visualizer.show_solutions(G, color_order=color_order, interval=1/6 * 1000, animate=True, remove_isomorphic_solutions=True)
+# visualizer.show_start_node_distribution(G, color_order=color_order)
