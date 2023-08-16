@@ -25,3 +25,7 @@
 
 #### Color order = 8 unique colors
 ![hex8](https://github.com/Compsciler/Tessellation-Coloring-Game-Helper/assets/43767079/a5a00459-f636-4b07-a642-eea66f271c41)
+
+#### Colors not considered (just walk to each node)
+![hex0](https://github.com/Compsciler/Tessellation-Coloring-Game-Helper/assets/43767079/ea966eda-54e4-4a14-9008-fe15e378b62b)
+
