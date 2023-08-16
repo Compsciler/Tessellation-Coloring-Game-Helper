@@ -24,12 +24,11 @@ def animate_backtracking(G, color_order=None, interval=200, valid_solution_pause
         if is_valid_solution:
             solutions_count += 1
 
-        draw_graph(G)
-        
-        plt.text(0.0, 1.0, f'Frame: {frame_num}', transform=plt.gca().transAxes, fontsize=12,
+        plt.text(0.0, 1.0, f'Frame: {frame_num + 1}/{len(graphs)}', transform=plt.gca().transAxes, fontsize=12,
                  verticalalignment='top', horizontalalignment='left', bbox=dict(facecolor='white', alpha=1.0))
         plt.text(0.0, 0.9, f'Solutions found: {solutions_count}', transform=plt.gca().transAxes, fontsize=12,
                  verticalalignment='top', horizontalalignment='left', bbox=dict(facecolor='white', alpha=1.0))
+        draw_graph(G)
         
         if is_valid_solution:
             old_interval = anim.event_source.interval
@@ -83,12 +82,12 @@ def show_solutions(G, color_order=None, interval=200, animate=True, remove_isomo
             # ax.clear()
             ax_graph = fig.add_axes([0.1, 0.1, 0.8, 0.8])
             ax_graph.axis('off')
-            draw_graph(solution_path_graphs[self.solution_index][frame_num])
             plt.text(0.0, 1.0, f'Solution number: {self.solution_index + 1}/{len(solution_graphs)}', transform=plt.gca().transAxes, fontsize=12,
                      verticalalignment='top', horizontalalignment='left', bbox=dict(facecolor='white', alpha=1.0))
             isomorphic_graph = get_key_by_list_value(isomorphic_graphs, solution_graphs[self.solution_index])
             plt.text(0.0, 0.9, f'Isomorphic solutions: {len(isomorphic_graphs[isomorphic_graph])}', transform=plt.gca().transAxes, fontsize=12,
                      verticalalignment='top', horizontalalignment='left', bbox=dict(facecolor='white', alpha=1.0))
+            draw_graph(solution_path_graphs[self.solution_index][frame_num])
 
     callback = SolutionIndex()
     
@@ -120,7 +119,12 @@ def show_start_node_distribution(G, color_order=None):
     nx.set_node_attributes(G_copy, dict(zip(G_copy.nodes(), node_colors)), COLOR)
 
     node_labels = {node: first_node_counts[node] for node in G_copy.nodes()}
+    plt.text(0.0, 1.0, 'Start Node Distribution', transform=plt.gca().transAxes, fontsize=12,
+             verticalalignment='top', horizontalalignment='left', bbox=dict(facecolor='white', alpha=1.0))
+    plt.text(0.0, 0.9, f'Total solutions: {len(solution_paths)}', transform=plt.gca().transAxes, fontsize=12,
+             verticalalignment='top', horizontalalignment='left', bbox=dict(facecolor='white', alpha=1.0))
     draw_graph(G_copy, node_labels=node_labels)
+
     plt.show()
 
 def draw_graph(G, node_labels=None):
@@ -140,6 +144,5 @@ def draw_graph(G, node_labels=None):
     # else:
     #     nx.draw_spectral(G, **draw_kwargs)
     if node_labels is not None:
-        for node, (x, y) in pos.items():
-            pos[node] = (x, y - 0.08)
-        nx.draw_networkx_labels(G, pos, labels=node_labels, verticalalignment='top')
+        node_label_pos = {node: (x, y - 0.08) for node, (x, y) in pos.items()}
+        nx.draw_networkx_labels(G, node_label_pos, labels=node_labels, verticalalignment='top')

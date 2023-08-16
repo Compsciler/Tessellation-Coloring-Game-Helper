@@ -25,7 +25,7 @@ import visualizer
 #     ('03', '02'), ('03', '13'), ('13', '12'), ('13', '23'), ('23', '22'), ('23', '33'), ('33', '32'),
 # ]
 
-# 5x5 square layout:
+# 5x5 square layout
 # edge_list = [
 #     ('00', '01'), ('01', '02'), ('02', '03'), ('03', '04'),
 #     ('10', '00'), ('10', '11'), ('11', '01'), ('11', '12'), ('12', '02'), ('12', '13'), ('13', '03'), ('13', '14'), ('14', '04'),
@@ -34,7 +34,7 @@ import visualizer
 #     ('40', '30'), ('40', '41'), ('41', '31'), ('41', '42'), ('42', '32'), ('42', '43'), ('43', '33'), ('43', '44'), ('44', '34'),
 # ]
 
-# No-color level layout:
+# No-color level layout
 # edge_list = [
 #     ('01', '02'), ('02', '03'),
 #     ('11', '01'), ('11', '12'), ('12', '02'), ('12', '13'), ('13', '03'),
@@ -111,5 +111,5 @@ color_order = ('r', 'g', 'b')
 
 ### Matplotlib output
 visualizer.animate_backtracking(G, color_order=color_order, interval=1/60 * 1000, valid_solution_pause_time_ms=1000)
-# visualizer.show_solutions(G, color_order=color_order, interval=1/6 * 1000, animate=True, remove_isomorphic_solutions=True)
+# visualizer.show_solutions(G, color_order=color_order, interval=1/60 * 1000, animate=True, remove_isomorphic_solutions=True)
 # visualizer.show_start_node_distribution(G, color_order=color_order)
