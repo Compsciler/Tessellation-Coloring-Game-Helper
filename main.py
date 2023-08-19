@@ -110,6 +110,6 @@ color_order = ('r', 'g', 'b')
 # pp.pprint(isomorph.get_isomorphism_counts(graphs))
 
 ### Matplotlib output
-visualizer.animate_backtracking(G, color_order=color_order, interval=1/60 * 1000, valid_solution_pause_time_ms=1000)
+visualizer.animate_backtracking(G, color_order=color_order, interval=1/60 * 1000, valid_solution_pause_time_ms=1000, stop_after_n_solutions=float('inf'))
 # visualizer.show_solutions(G, color_order=color_order, interval=1/60 * 1000, animate=True, remove_isomorphic_solutions=True)
 # visualizer.show_start_node_distribution(G, color_order=color_order)

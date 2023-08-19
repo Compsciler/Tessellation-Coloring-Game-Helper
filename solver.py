@@ -13,12 +13,14 @@ class NodeOutputType(Enum):
     FULL_GRAPH_AND_NODE_LIST = auto()
     FULL_GRAPHS_FOR_PATH = auto()
 
-def find_solutions(G, color_order=None, node_output_type=NodeOutputType.NODE_LIST, show_backtracking_process=False, start_nodes=None):
+def find_solutions(G, color_order=None, node_output_type=NodeOutputType.NODE_LIST, show_backtracking_process=False, stop_after_n_solutions=float('inf'), start_nodes=None):
     def dfs(path, index):  # Backtracking
+        nonlocal solution_count
         is_valid_solution_ = is_valid_solution(path, G)
         if is_valid_solution_ or show_backtracking_process:
             append_solution(path)
         if is_valid_solution_:
+            solution_count += 1
             return
 
         prev_node = path[-1] if len(path) > 0 else None
@@ -39,6 +41,8 @@ def find_solutions(G, color_order=None, node_output_type=NodeOutputType.NODE_LIS
                 index += 1
 
                 dfs(path, index)
+                if solution_count >= stop_after_n_solutions:
+                    return
 
                 G.nodes[node].update(old_node_attrs)
                 path.pop()
@@ -80,7 +84,8 @@ def find_solutions(G, color_order=None, node_output_type=NodeOutputType.NODE_LIS
 
     old_G = G.copy()
     index = 0
-    solutions = []
+    solutions = []  # Solutions may not be solutions depending on node_output_type
+    solution_count = 0  # True solution count
     edges_travelled = []
     path_graphs = [G.copy()]
     dfs([], index)

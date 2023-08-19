@@ -13,7 +13,7 @@ DEFAULT_NODE_ATTRIBUTE_VALUES = {
     PROPS: (),
 }
 
-NO_COLOR_NODE_COLOR = 'k'  # Color for "just fill everything in" mode
+NO_COLOR_NODE_COLOR = 'dimgray'  # Color for "just fill everything in" mode
 
 
 WIDTH = 'width'

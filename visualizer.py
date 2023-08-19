@@ -7,8 +7,8 @@ from common import *
 import isomorph
 import solver
 
-def animate_backtracking(G, color_order=None, interval=200, valid_solution_pause_time_ms=1000):
-    graphs_and_paths = solver.find_solutions(G, color_order=color_order, node_output_type=solver.NodeOutputType.FULL_GRAPH_AND_NODE_LIST, show_backtracking_process=True)
+def animate_backtracking(G, color_order=None, interval=200, valid_solution_pause_time_ms=1000, stop_after_n_solutions=float('inf')):
+    graphs_and_paths = solver.find_solutions(G, color_order=color_order, node_output_type=solver.NodeOutputType.FULL_GRAPH_AND_NODE_LIST, show_backtracking_process=True, stop_after_n_solutions=stop_after_n_solutions)
     graphs, paths = zip(*graphs_and_paths)
     fig, ax = plt.subplots()
     plt.axis('off')
